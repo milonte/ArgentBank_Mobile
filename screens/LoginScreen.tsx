@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TextInput, Button, Switch, ActivityIndicator } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { GetUserProfile, GetUserToken } from '../api/api'
 import { AppDispatch, RootState } from '../store/store'
 import { useDispatch, useSelector } from 'react-redux'

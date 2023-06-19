@@ -1,21 +1,24 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import React, { useState } from 'react'
 import ProfileScreen from '../screens/ProfileScreen';
-import { Button, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { UserInterface } from '../models/UserInterface';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store/store';
 import { logout } from '../store/userSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faClose, faSignOut, faUserCircle, faUserEdit } from '@fortawesome/free-solid-svg-icons';
+import EditUserScreen from '../screens/EditUserScreen';
+import { useNavigation } from '@react-navigation/native';
 
 export default function UserStack() {
     const Stack = createNativeStackNavigator();
     const user: UserInterface = useSelector((state: RootState) => state.user);
     const dispatch: AppDispatch = useDispatch();
-    const [modaleVisible, setModaleVisible] = useState<boolean>(false)
+    const [modaleVisible, setModaleVisible] = useState<boolean>(false);
 
     function HeaderSettingsModal() {
+        const navigation = useNavigation();
         return (
             <View>
                 <Modal
@@ -31,10 +34,15 @@ export default function UserStack() {
                             <FontAwesomeIcon icon={faClose} size={30} />
                         </Pressable>
                     </View>
-                    <View style={styles.modalContent}>
-                        <Text style={styles.modalLink}>Edit User</Text>
-                        <FontAwesomeIcon icon={faUserEdit} size={20} color={'#333'} />
-                    </View>
+                    <Pressable style={{ height: 60 }} onPress={() => {
+                        navigation.navigate('EditUser');
+                        setModaleVisible(false)
+                    }}>
+                        <View style={styles.modalContent}>
+                            <Text style={styles.modalLink}>Edit User</Text>
+                            <FontAwesomeIcon icon={faUserEdit} size={20} color={'#333'} />
+                        </View>
+                    </Pressable>
                     <Pressable style={{ height: 60 }} onPress={() => { dispatch(logout()) }}>
                         <View style={styles.modalContent}>
                             <Text style={styles.modalLink}>Logout</Text>
@@ -46,7 +54,7 @@ export default function UserStack() {
         )
     }
 
-    function HeaderRight() {
+    function HeaderRight({ navigation }: any) {
         return (
             <>
                 <HeaderSettingsModal />
@@ -64,6 +72,10 @@ export default function UserStack() {
     return (
         <Stack.Navigator>
             <Stack.Screen name="Profile" component={ProfileScreen}
+                options={{
+                    headerRight: () => (<HeaderRight />)
+                }} />
+            <Stack.Screen name="EditUser" component={EditUserScreen}
                 options={{
                     headerRight: () => (<HeaderRight />)
                 }} />
