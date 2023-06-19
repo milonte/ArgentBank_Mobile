@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, Button, Switch, ActivityIndicator } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Button, ActivityIndicator, Image } from 'react-native'
 import React, { useState } from 'react'
 import { GetUserProfile, GetUserToken } from '../api/api'
 import { AppDispatch, RootState } from '../store/store'
@@ -27,11 +27,8 @@ export default function LoginScreen() {
     }
 
     return (
-        <View style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center'
-        }}>
+        <View style={styles.container}>
+            <Image source={require('../medias/images/ArgentBank.png')} style={styles.logo} />
             <Text style={styles.label}>Email</Text>
             <TextInput inputMode='email' style={styles.input}
                 onChangeText={(text) => { changeEmail(text) }} />
@@ -42,7 +39,7 @@ export default function LoginScreen() {
             {user?.error ?
                 <Text style={{ color: 'red' }}>{user.error}</Text>
                 : null}
-            <View style={{ marginTop: 30, width: '80%' }}>
+            <View style={{ marginTop: 30, width: '80%', }}>
                 {isLoading ?
                     <ActivityIndicator size={'large'} /> :
                     <Button title='Send'
@@ -54,6 +51,17 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+    },
+    logo: {
+        width: '80%',
+        resizeMode: 'contain',
+        marginBottom: 40,
+    },
     text: {
         color: '#66f',
     },
